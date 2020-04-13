@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29905.134
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClassAnalyzer", "ClassAnalyzer\ClassAnalyzer.csproj", "{C74D99A7-25EE-48EC-BF3A-DEC8F14C84D9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ClassAnalyzer.Domain", "ClassAnalyzer.Domain\ClassAnalyzer.Domain.csproj", "{6FFAE6A8-6C2F-4071-9E8E-2CCFFD1718F5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C74D99A7-25EE-48EC-BF3A-DEC8F14C84D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C74D99A7-25EE-48EC-BF3A-DEC8F14C84D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C74D99A7-25EE-48EC-BF3A-DEC8F14C84D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C74D99A7-25EE-48EC-BF3A-DEC8F14C84D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FFAE6A8-6C2F-4071-9E8E-2CCFFD1718F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FFAE6A8-6C2F-4071-9E8E-2CCFFD1718F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FFAE6A8-6C2F-4071-9E8E-2CCFFD1718F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FFAE6A8-6C2F-4071-9E8E-2CCFFD1718F5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DDC9B414-B009-4E17-994C-DCD65C5EFC52}
+	EndGlobalSection
+EndGlobal
