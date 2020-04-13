@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace ClassAnalyzer
@@ -9,7 +10,7 @@ namespace ClassAnalyzer
     {
         private static readonly Dictionary<string, bool> PrimitiveTypeCheckCache = new Dictionary<string, bool>();
 
-        private readonly Dictionary<string, string> Cache = new Dictionary<string, string>();
+        private readonly Dictionary<string, List<PropertyInfo>> PropsCache = new Dictionary<string, List<PropertyInfo>>();
 
         /// <summary>
         /// Gets a collection of objects serialized as string
@@ -94,8 +95,13 @@ namespace ClassAnalyzer
             sb.Append(new string(' ', shift));
             sb.AppendLine(new string('-', 30 - shift));
             shift += 5;
+            
+            if (!PropsCache.TryGetValue(type.FullName, out var props))
+            {
+                PropsCache[type.FullName] = props = type.GetProperties().ToList();
+            }
 
-            foreach (var p in type.GetProperties())
+            foreach (var p in props)
             {
                 var value = p.GetValue(obj);
 
