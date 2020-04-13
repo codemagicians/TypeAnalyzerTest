@@ -11,26 +11,73 @@ namespace ClassAnalyzer
 
         private readonly Dictionary<string, string> Cache = new Dictionary<string, string>();
 
-        public string GetStringObjRepresentation<TBaseType>(TBaseType obj)
+        /// <summary>
+        /// Gets a collection of objects serialized as string
+        /// </summary>
+        /// <typeparam name="T">Object type</typeparam>
+        /// <param name="collection">Target collection of objects</param>
+        /// <param name="limitOutput">Max objects to be serialized. Use it to prevent overflow</param>
+        /// <returns>String representation of serialized collection</returns>
+        public string GetStringObjRepresentations<T>(IEnumerable<T> collection, int limitOutput = 25)
         {
-            var type = typeof(TBaseType);
-
-            if (Cache.TryGetValue(type.FullName, out var s))
+            if (collection == null)
             {
-                return s;
+                return "Error. Initial object cannot be null!";
             }
-            Cache[type.FullName] = s = GetStringObjectRepresentation(obj);
-            return s;
+            var type = typeof(T);
+            var list = collection as IList<T> ?? collection.ToList();
+
+            if (list.Count == 0)
+            {
+                return $"Object is an empty collection of type {type.Name}";
+            }
+            string result = $"Object is a collection of type {type.Name} \n\n";
+
+            foreach (var el in collection.Take(limitOutput))
+            {
+                result += GetStringObjRepresentation(el);
+            }
+            return result;
         }
 
-        private string GetStringObjectRepresentation<TBaseType>(TBaseType obj, int shift = 0, HashSet<string> history = null)
+        /// <summary>
+        /// Gets object serialized as string
+        /// </summary>
+        /// <typeparam name="T">Object type</typeparam>
+        /// <param name="obj">An instance of the object</param>
+        /// <returns>String representation of serialized object</returns>
+        public string GetStringObjRepresentation<T>(T obj)
         {
-            history ??= new HashSet<string>();
-            var type = obj.GetType();
-            history.Add(type.FullName);
+            if (obj == null)
+            {
+                return "Error. Initial object cannot be null!";
+            }
+            var type = typeof(T);
+
+            if (IsPrimitiveType(type))
+            {
+                return $"Object is of primitive type {type.Name} with value - {obj}";
+            }
+            return GetStringObjectRepresentation(obj, type: obj.GetType());
+        }
+
+        private string GetStringObjectRepresentation<TBaseType>(TBaseType obj, int shift = 0, Dictionary<string, int> history = null, Type type = null)
+        {
+            if (obj == null)
+            {
+                throw new ArgumentNullException(nameof(obj));
+            }
+
+            if (shift < 0)
+            {
+                throw new ArgumentException(nameof(shift));
+            }
+            history ??= new Dictionary<string, int>();
+            history[type.FullName] = shift;
             var sb = new StringBuilder();
             sb.AppendLine("");
             AddString(sb, $"Object of type {type.Name}", shift);
+            sb.Append(new string(' ', shift));
             sb.AppendLine(new string('-', 30 - shift));
             shift += 5;
 
@@ -44,13 +91,19 @@ namespace ClassAnalyzer
                 }
                 else
                 {
-                    if (history.Contains(p.PropertyType.FullName))
+                    if (history.TryGetValue(p.PropertyType.FullName, out var layer) && layer != shift)
                     {
                         AddString(sb, $"{p.Name}" + " = X \n Error! A circular dependency is detected!", shift);
                         return sb.ToString();
                     }
-                    history.Add(p.PropertyType.FullName);
-                    var strObj = GetStringObjectRepresentation(value, shift, history);
+
+                    if (value == null)
+                    {
+                        history[p.PropertyType.FullName] = shift;
+                        AddString(sb, $"{p.Name} = null", shift);
+                        continue;
+                    }
+                    var strObj = GetStringObjectRepresentation(value, shift, history, p.PropertyType);
                     AddString(sb, strObj, shift);
                 }
             }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using ClassAnalyzer;
 
 namespace Azrielit_Test
@@ -7,24 +8,43 @@ namespace Azrielit_Test
     {
         static void Main(string[] args)
         {
-            var p = new Person
+            var list = new List<Person>()
             {
-                Age = 30,
-                Name = new Name
+                new Person
                 {
-                    FirstName = "Alex",
-                    LastName = "Green",
-                    Address = new Address
+                    Age = 30,
+                    Name = new Name
                     {
-                        City = "Tel Aviv",
-                        Street = "Ha Shalom",
-                        Country = "Israel",
-                        PostCode = null
+                        FirstName = "Alex",
+                        LastName = "Green",
+                        Address = new Address
+                        {
+                            City = "Tel Aviv",
+                            Street = "Ha Shalom",
+                            Country = "Israel",
+                            PostCode = null
+                        }
+                    }
+                },
+                new Person
+                {
+                    Age = 30,
+                    Name = new Name
+                    {
+                        FirstName = "Tom",
+                        LastName = "Riddle",
+                        Address = new Address
+                        {
+                            City = "London",
+                            Street = "Cannon street",
+                            Country = "United Kingdom",
+                            PostCode = "NE150XQ"
+                        }
                     }
                 }
             };
             var analyzer = new Analyzer();
-            var s = analyzer.GetStringObjRepresentation(p);
+            var s = analyzer.GetStringObjRepresentations(list);
             Console.WriteLine(s);
         }
     }
