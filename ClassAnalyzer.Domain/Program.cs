@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using ClassAnalyzer;
+using ClassAnalyzer.Domain;
 
 namespace Azrielit_Test
 {
@@ -8,7 +9,7 @@ namespace Azrielit_Test
     {
         static void Main(string[] args)
         {
-            var list = new List<Person>()
+            var list = new List<object>
             {
                 new Person
                 {
@@ -26,8 +27,11 @@ namespace Azrielit_Test
                         }
                     }
                 },
-                new Person
+                5,
+                "FooBar",
+                new Employee
                 {
+                    ExperienceYears = 10,
                     Age = 30,
                     Name = new Name
                     {

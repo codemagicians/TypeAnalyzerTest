@@ -25,19 +25,20 @@ namespace ClassAnalyzer
                 return "Error. Initial object cannot be null!";
             }
             var type = typeof(T);
-            var list = collection as IList<T> ?? collection.ToList();
+            var selection = collection.Take(limitOutput).ToList();
 
-            if (list.Count == 0)
+            if (selection.Count == 0)
             {
                 return $"Object is an empty collection of type {type.Name}";
             }
-            string result = $"Object is a collection of type {type.Name} \n\n";
+            var sb = new StringBuilder();
+            sb.AppendLine($"Object is a collection of type {type.Name} \n\n");
 
-            foreach (var el in collection.Take(limitOutput))
+            foreach (var el in selection)
             {
-                result += GetStringObjRepresentation(el);
+                sb.AppendLine(GetStringObjRepresentation(el));
             }
-            return result;
+            return sb.ToString();
         }
 
         /// <summary>
@@ -48,15 +49,28 @@ namespace ClassAnalyzer
         /// <returns>String representation of serialized object</returns>
         public string GetStringObjRepresentation<T>(T obj)
         {
-            if (obj == null)
+            var type = obj?.GetType();
+
+            if (type == null)
             {
-                return "Error. Initial object cannot be null!";
+                try
+                {
+                    type = Activator.CreateInstance(typeof(T)).GetType();
+                }
+                catch (Exception ex)
+                {
+                    type = typeof(T);
+                }
             }
-            var type = typeof(T);
 
             if (IsPrimitiveType(type))
             {
                 return $"Object is of primitive type {type.Name} with value - {obj}";
+            }
+
+            if (obj == null)
+            {
+                return $"\nObject of type {type.Name} - null\n\n\n";
             }
             return GetStringObjectRepresentation(obj, type: obj.GetType());
         }
