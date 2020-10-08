@@ -43,7 +43,7 @@ namespace ClassAnalyzer
         }
 
         /// <summary>
-        /// Gets object serialized as string
+        /// Serializes object as string
         /// </summary>
         /// <typeparam name="T">Object type</typeparam>
         /// <param name="obj">An instance of the object</param>
@@ -66,14 +66,9 @@ namespace ClassAnalyzer
 
             if (IsPrimitiveType(type))
             {
-                return $"Object is of primitive type {type.Name} with value - {obj}";
+                return obj != null ? $"Object is of primitive type {type.Name} with value - {obj}" : $"Object is of primitive type {type.Name} with value - null";
             }
-
-            if (obj == null)
-            {
-                return $"\nObject of type {type.Name} - null\n\n\n";
-            }
-            return GetStringObjectRepresentation(obj, type: obj.GetType());
+            return obj != null ? GetStringObjectRepresentation(obj, type: type) : $"\nObject of type {type.Name} - null\n\n\n";
         }
 
         private string GetStringObjectRepresentation<TBaseType>(TBaseType obj, int shift = 0, Dictionary<string, int> history = null, Type type = null)
